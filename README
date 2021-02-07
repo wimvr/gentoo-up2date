@@ -1,0 +1,54 @@
+### DOWNLOAD ###
+
+This package can be downloaded from:
+
+https://sourceforge.net/projects/gentoo-up2date/files/
+
+### INSTALL ###
+
+Unpack the archive, and copy up2date* to /usr/bin/. In case your machine is not
+always turned on, and you are using anacrontab, add the following lines to
+/etc/anacrontab:
+
+1	30	dailyu2d	/usr/bin/up2date.daily
+7	50	weeklyu2d	/usr/bin/up2date.weekly
+
+In case your machine is always turned on, and you are using 'normal' cron, add
+the following line to /etc/crontab:
+
+55 1 * * *	root	/usr/bin/up2date
+
+### DEINSTALL ###
+
+Undo the above.
+
+### STRUCTURE ###
+
+The script first does a sync of the portage tree, and afterwards checks for
+security updates. Afterwards it will check if it is Saturday, in that case
+it will look up all pending updates on the system, and mail the overview, as
+well as an easy to copy-paste list of all updates, new slots and rebuilds that
+are pending. Last, it checks for new news items, and includes them in the mail
+as well.
+In case you use anacron, it will not mail all pending updates on Saturday, but
+once every 7 days (or more if the machine is not running on the 7th day).
+
+### BUGS ###
+
+- No man-page yet. Do we need one?
+
+### FUTURE PLANS / TODO ###
+
+- ?
+
+### ACKNOWLEDGEMENTS ###
+
+- All the Open-source developers in the world, for making all the good
+  stuff we need.
+- Others I forgot. If you think your name should go here, let me know.
+
+### AUTHOR ###
+
+Wim van Ravesteijn
+More about me, and to contact me: http://wim.ravesteijn.nl/
+

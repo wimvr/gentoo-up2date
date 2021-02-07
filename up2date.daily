@@ -1,0 +1,29 @@
+#!/bin/bash
+
+exec 2>&1
+
+# Sync the glsa tree
+emerge --sync >/dev/null 2>/dev/null
+/usr/bin/eix-update >/dev/null
+
+# Find all GLSAs that do not need any update of software to be fixed
+NAGLSA=`glsa-check --pretend affected 2>/dev/null | grep -b1 "Nothing to do" | awk --posix '/[0-9]{6}-[0-9]{2}/ { print $3 }'`
+
+# Fix all the GLSAs that do not need any software update
+if [ "${NAGLSA}" ]
+then
+	glsa-check --fix ${NAGLSA} >/dev/null 2>&1
+fi
+
+# Create a list of security updates
+UGLSA=`glsa-check --list affected 2>/dev/null`
+
+if [ "${UGLSA}" ]
+then
+	# GLSA open for manual intervention
+	echo "Open security issues:"
+	glsa-check --nocolor --list affected 2>/dev/null
+fi
+
+eselect --brief news read new | grep -v 'No news is good news.'
+

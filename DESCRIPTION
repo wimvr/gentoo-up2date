@@ -1,0 +1,5 @@
+This tool sends out a mail about pending updates for your Gentoo system on a 
+weekly basis. Security updates and gentoo news will be mailed every day.
+Works both on systems that run 24/7 as well as systems that run on irregular
+basis (desktops). Compatible with binary packages.
+

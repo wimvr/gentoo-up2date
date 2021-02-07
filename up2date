@@ -1,0 +1,53 @@
+#!/bin/bash
+
+exec 2>&1
+
+# Sync the glsa tree
+emerge --sync >/dev/null 2>/dev/null
+/usr/bin/eix-update >/dev/null
+
+# Find all GLSAs that do not need any update of software to be fixed
+NAGLSA=`glsa-check --pretend affected 2>/dev/null | grep -b1 "Nothing to do" | awk --posix '/[0-9]{6}-[0-9]{2}/ { print $3 }'`
+
+# Fix all the GLSAs that do not need any software update
+if [ "${NAGLSA}" ]
+then
+	glsa-check --fix ${NAGLSA} >/dev/null 2>&1
+fi
+
+# Create a list of security updates
+UGLSA=`glsa-check --list affected 2>/dev/null`
+
+if [ "${UGLSA}" ]
+then
+	# GLSA open for manual intervention
+	echo "Open security issues:"
+	glsa-check --nocolor --list affected 2>/dev/null
+fi
+
+# Mail all available updates on Saturday morning
+if [ `date +%a` = "Sat" ]
+then
+	TMPFILE=`mktemp /var/tmp/u2d.XXXXXX`
+	emerge -puDN system world | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
+	if [ `cat $TMPFILE | wc -l` -ge 1 ]
+	then
+		echo -e "\n\nAvailable software updates:"
+		cat $TMPFILE
+		emerge -puND --columns system world 2>/dev/null | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
+		echo -e "\n\nUpdates:"
+		cat $TMPFILE | gawk '/\[(ebuild|binary).*   U.*\] [^ ]*/ { print $4 " \\"; }'
+		cat $TMPFILE | gawk '/\[(ebuild|binary).*r  U.*\] [^ ]*/ { print $5 " \\"; }'
+		echo -e "\n\nNew slots:"
+		cat $TMPFILE | gawk '/\[(ebuild|binary).*NS.*\] [^ ]*/ { print $4 " \\"; }'
+		echo -e "\n\nRebuilds:"
+		cat $TMPFILE | gawk '/\[(ebuild|binary).* R.*\] [^ ]*/ { print $4 " \\"; }'
+	else
+		echo -e "\n\nNo software updates available"
+	fi
+	echo ""
+	rm $TMPFILE
+fi
+
+eselect --brief news read new | grep -v 'No news is good news.'
+
