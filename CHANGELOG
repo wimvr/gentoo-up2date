@@ -1,7 +1,12 @@
+0.3 (2016-09-19):
+- Match day (Saturday) numerical, to also work in other languages than English;
+- Also show already manually downloaded binaries;
+- Higher backtrack for perl updates.
+
 0.2 (2015-10-29):
 - Also show updates that require manual download;
 - Fix ebuild to mention comments in correct step.
 
 0.1 (2015-09-20):
-- Created the basic scripts to make the functionality of
-  mailing system updates.
+- Created the basic scripts to make the functionality of mailing system updates.
+

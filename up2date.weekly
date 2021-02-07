@@ -2,25 +2,25 @@
 
 exec 2>&1
 
-# Mail all available updates
+# Sync the portage tree
 emerge --sync >/dev/null 2>/dev/null
 /usr/bin/eix-update >/dev/null
 
 TMPFILE=`mktemp /var/tmp/u2d.XXXXXX`
-emerge -puND system world | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
+emerge -puDN --backtrack=100 system world | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
 if [ `cat $TMPFILE | wc -l` -ge 1 ]
 then
 	echo -e "\n\nAvailable software updates:"
 	cat $TMPFILE
-	emerge -puND --columns system world 2>/dev/null | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
+	emerge -puND --backtrack=100 --columns system world 2>/dev/null | grep -e "ebuild" -e "blocks" -e "binary" >$TMPFILE
 	echo -e "\n\nUpdates:"
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*   U.*\] [^ ]*/ { print $4 " \\"; }'
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*r  U.*\] [^ ]*/ { print $5 " \\"; }'
-	cat $TMPFILE | gawk '/\[(ebuild|binary).*  FU.*\] [^ ]*/ { print $4 " \\"; }'
+	cat $TMPFILE | gawk '/\[(ebuild|binary).*  (F|f)U.*\] [^ ]*/ { print $4 " \\"; }'
 	echo -e "\n\nNew slots:"
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*NS.*\] [^ ]*/ { print $4 " \\"; }'
 	echo -e "\n\nRebuilds:"
-	cat $TMPFILE | gawk '/\[(ebuild|binary).* R.*\] [^ ]*/ { print $4 " \\"; }'
+	cat $TMPFILE | gawk '/\[(ebuild|binary).* r?R.*\] [^ ]*/ { print $4 " \\"; }'
 else
 	echo -e "\n\nNo software updates available"
 fi
