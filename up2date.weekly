@@ -16,6 +16,7 @@ then
 	echo -e "\n\nUpdates:"
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*   U.*\] [^ ]*/ { print $4 " \\"; }'
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*r  U.*\] [^ ]*/ { print $5 " \\"; }'
+	cat $TMPFILE | gawk '/\[(ebuild|binary).*  FU.*\] [^ ]*/ { print $4 " \\"; }'
 	echo -e "\n\nNew slots:"
 	cat $TMPFILE | gawk '/\[(ebuild|binary).*NS.*\] [^ ]*/ { print $4 " \\"; }'
 	echo -e "\n\nRebuilds:"

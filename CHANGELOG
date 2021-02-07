@@ -1,3 +1,7 @@
+0.2 (2015-10-29):
+- Also show updates that require manual download;
+- Fix ebuild to mention comments in correct step.
+
 0.1 (2015-09-20):
 - Created the basic scripts to make the functionality of
   mailing system updates.

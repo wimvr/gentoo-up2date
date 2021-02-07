@@ -27,12 +27,18 @@ src_install() {
 	if use anacron; then
 		doexe up2date.daily
 		doexe up2date.weekly
+	else
+		doexe up2date
+	fi
+}
+
+pkg_postinst() {
+	if use anacron; then
 		elog "To actually run the tool, add the following lines to /etc/crontab:"
 		elog ""
 		elog "    1       30      dailyu2d        /usr/bin/up2date.daily"
 		elog "    7       50      weeklyu2d       /usr/bin/up2date.weekly"
 	else
-		doexe up2date
 		elog "To actually run the tool, add the following line to /etc/crontab:"
 		elog ""
 		elog "    55 1 * * *      root    /usr/bin/up2date"
