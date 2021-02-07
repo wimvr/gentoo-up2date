@@ -1,25 +1,20 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
-# $Id$
 
-EAPI=5
+EAPI=7
 
 DESCRIPTION="Easily keep your Gentoo system updated"
-HOMEPAGE="https://sourceforge.net/projects/gentoo-up2date/"
-SRC_URI="mirror://sourceforge/gentoo-up2date/${P}.tar.bz2"
+HOMEPAGE="https://github.com/wimvr/nagios-check_ext"
+SRC_URI="https://github.com/wimvr/gentoo-up2date/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="GPL-1"
+LICENSE="Apache-2.0"
 SLOT="0"
 KEYWORDS="x86 amd64"
 IUSE="anacron"
 
 DEPEND="virtual/cron"
 RDEPEND="${DEPEND}"
-
-src_compile() {
-	# Nothing to compile, remember, we are just a shell script...
-	einfo "Nothing to compile"
-}
+BDEPEND=""
 
 src_install() {
 	dodoc README CHANGELOG DESCRIPTION

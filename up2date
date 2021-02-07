@@ -16,13 +16,18 @@ then
 fi
 
 # Create a list of security updates
-UGLSA=`glsa-check --list affected 2>/dev/null`
+UGLSA=`glsa-check --nocolor --list affected 2>/dev/null`
 
 if [ "${UGLSA}" ]
 then
 	# GLSA open for manual intervention
 	echo "Open security issues:"
-	glsa-check --nocolor --list affected 2>/dev/null
+	IFS=$'\n'
+	for GLSA in $UGLSA
+	do
+		echo $GLSA
+		glsa-check --nocolor -p `echo ${GLSA} | cut -b1-9` | grep '(vulnerable:'
+	done
 fi
 
 # Mail all available updates on Saturday morning
