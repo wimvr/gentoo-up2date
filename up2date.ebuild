@@ -16,6 +16,11 @@ DEPEND="virtual/cron"
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+src_unpack() {
+	unpack ${A}
+	mv ${WORKDIR}/gentoo-${PF}/ ${WORKDIR}/${PF}/
+}
+
 src_install() {
 	dodoc README CHANGELOG DESCRIPTION
 	exeinto /usr/bin
